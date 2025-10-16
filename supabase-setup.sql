@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS meetings (
   client_id UUID REFERENCES clients ON DELETE SET NULL,
   title TEXT NOT NULL,
   description TEXT,
+  pauta TEXT, -- Campo para a pauta da reunião
   date DATE NOT NULL,
   time TIME NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
@@ -187,4 +188,3 @@ CREATE INDEX IF NOT EXISTS idx_reminders_user_id ON reminders(user_id);
 CREATE INDEX IF NOT EXISTS idx_reminders_due_date ON reminders(due_date);
 CREATE INDEX IF NOT EXISTS idx_quotes_user_id ON quotes(user_id);
 CREATE INDEX IF NOT EXISTS idx_quotes_status ON quotes(status);
-

@@ -12,6 +12,7 @@ const Meetings = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    pauta: '', // Adicionado para a pauta da reunião
     date: '',
     time: '',
     client_id: '',
@@ -89,6 +90,7 @@ const Meetings = () => {
     setFormData({
       title: meeting.title,
       description: meeting.description || '',
+      pauta: meeting.pauta || '',
       date: meeting.date,
       time: meeting.time,
       client_id: meeting.client_id || '',
@@ -113,6 +115,7 @@ const Meetings = () => {
     setFormData({
       title: '',
       description: '',
+      pauta: '',
       date: '',
       time: '',
       client_id: '',
@@ -152,6 +155,16 @@ const Meetings = () => {
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows="3"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Pauta</label>
+            <textarea
+              value={formData.pauta}
+              onChange={(e) => setFormData({ ...formData, pauta: e.target.value })}
+              rows="5"
+              placeholder="Digite os tópicos da reunião, um por linha."
             />
           </div>
 
@@ -208,25 +221,89 @@ const Meetings = () => {
           <p className="empty-message">Nenhuma reunião cadastrada.</p>
         ) : (
           meetings.map((meeting) => (
-            <div key={meeting.id} className="item-card">
-              <h3>{meeting.title}</h3>
-              {meeting.description && <p className="item-description">{meeting.description}</p>}
-              <div className="item-details">
-                <span>📅 {new Date(meeting.date + 'T00:00:00').toLocaleDateString('pt-BR')}</span>
-                <span>🕐 {meeting.time}</span>
-                {meeting.clients && <span>👤 {meeting.clients.name}</span>}
-              </div>
-              <div className="item-actions">
-                <button onClick={() => handleEdit(meeting)} className="btn-edit">
-                  Editar
-                </button>
-                <button onClick={() => handleDelete(meeting.id)} className="btn-delete">
-                  Excluir
-                </button>
-              </div>
-            </div>
+            <MeetingItem
+              key={meeting.id}
+              meeting={meeting}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))
         )}
+      </div>
+    </div>
+  );
+};
+
+// Componente para cada item da reunião com cronômetro
+const MeetingItem = ({ meeting, onEdit, onDelete }) => {
+  const [timer, setTimer] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+  const countRef = React.useRef(null);
+
+  const startTimer = () => {
+    setIsActive(true);
+    countRef.current = setInterval(() => {
+      setTimer((timer) => timer + 1);
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(countRef.current);
+    setIsActive(false);
+  };
+
+  const formatTime = (time) => {
+    const getSeconds = `0${time % 60}`.slice(-2);
+    const minutes = `${Math.floor(time / 60)}`;
+    const getMinutes = `0${minutes % 60}`.slice(-2);
+    const getHours = `0${Math.floor(time / 3600)}`.slice(-2);
+    return `${getHours}:${getMinutes}:${getSeconds}`;
+  };
+
+  return (
+    <div className="item-card">
+      <h3>{meeting.title}</h3>
+      {meeting.description && <p className="item-description">{meeting.description}</p>}
+      
+      {meeting.pauta && (
+        <div className="pauta-section">
+          <h4>Pauta da Reunião:</h4>
+          <ul>
+            {meeting.pauta.split('\n').map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="item-details">
+        <span>📅 {new Date(meeting.date + 'T00:00:00').toLocaleDateString('pt-BR')}</span>
+        <span>🕐 {meeting.time}</span>
+        {meeting.clients && <span>👤 {meeting.clients.name}</span>}
+      </div>
+
+      <div className="stopwatch-container">
+        <p className="timer-display">{formatTime(timer)}</p>
+        <div className="timer-controls">
+          {!isActive ? (
+            <button onClick={startTimer} className="btn-start">
+              Iniciar
+            </button>
+          ) : (
+            <button onClick={stopTimer} className="btn-stop">
+              Encerrar
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="item-actions">
+        <button onClick={() => onEdit(meeting)} className="btn-edit">
+          Editar
+        </button>
+        <button onClick={() => onDelete(meeting.id)} className="btn-delete">
+          Excluir
+        </button>
       </div>
     </div>
   );
