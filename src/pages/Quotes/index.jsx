@@ -62,6 +62,11 @@ const Quotes = () => {
     }
   }, [user, loadQuotes, loadClients]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -196,7 +201,17 @@ const Quotes = () => {
 
       {showForm && (
         <form onSubmit={handleSubmit} className="form-card">
-          {/* Form fields... */}
+          <select name="client_id" value={formData.client_id} onChange={handleChange} required>
+            <option value="">Selecione o Cliente</option>
+            {clients.map(client => (
+              <option key={client.id} value={client.id}>{client.name}</option>
+            ))}
+          </select>
+          <input type="text" name="product_service" placeholder="Produto/Serviço" value={formData.product_service} onChange={handleChange} required />
+          <input type="number" name="value" placeholder="Valor" value={formData.value} onChange={handleChange} required />
+          <input type="number" name="commission_percentage" placeholder="Comissão (%)" value={formData.commission_percentage} onChange={handleChange} required />
+          <input type="date" name="quote_date" value={formData.quote_date} onChange={handleChange} required />
+          <button type="submit" className="btn-primary">{editingId ? 'Atualizar' : 'Salvar'}</button>
         </form>
       )}
 
