@@ -31,6 +31,11 @@ const Navbar = () => {
           <li onClick={() => setMenuOpen(false)}><Link to="/quotes">Orçamentos</Link></li>
           <li onClick={() => setMenuOpen(false)}><Link to="/sales">Vendas</Link></li>
           <li onClick={() => setMenuOpen(false)}><Link to="/reminders">Lembretes</Link></li>
+          <li onClick={handleSignOut}>
+            <button className="navbar-logout-responsive">
+              Sair
+            </button>
+          </li>
         </ul>
         <button onClick={handleSignOut} className="navbar-logout">
           Sair
