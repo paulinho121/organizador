@@ -24,6 +24,7 @@ const Navbar = () => {
           <li><Link to="/dashboard">Dashboard</Link></li>
           <li><Link to="/meetings">Reuniões</Link></li>
           <li><Link to="/clients">Clientes</Link></li>
+          <li><Link to="/quotes">Orçamentos</Link></li>
           <li><Link to="/sales">Vendas</Link></li>
           <li><Link to="/reminders">Lembretes</Link></li>
         </ul>
@@ -36,4 +37,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

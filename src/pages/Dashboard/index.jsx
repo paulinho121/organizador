@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../../lib/SupabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import './Dashboard.css';
 
@@ -11,16 +11,12 @@ const Dashboard = () => {
     sales: 0,
     reminders: 0,
     totalCommission: 0,
+    pendingQuotesCount: 0,
+    pendingQuotesValue: 0,
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      loadDashboardData();
-    }
-  }, [user]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       const today = new Date().toISOString().split('T')[0];
 
@@ -52,19 +48,36 @@ const Dashboard = () => {
         .eq('user_id', user.id)
         .eq('is_completed', false);
 
+      // Buscar orçamentos pendentes
+      const { data: quotesData, count: quotesCount } = await supabase
+        .from('quotes')
+        .select('value', { count: 'exact' })
+        .eq('user_id', user.id)
+        .eq('status', 'pendente');
+
+      const pendingQuotesValue = quotesData?.reduce((sum, quote) => sum + (parseFloat(quote.value) || 0), 0) || 0;
+
       setStats({
         meetings: meetingsCount || 0,
         clients: clientsCount || 0,
         sales: salesCount || 0,
         reminders: remindersCount || 0,
         totalCommission: totalCommission,
+        pendingQuotesCount: quotesCount || 0,
+        pendingQuotesValue: pendingQuotesValue,
       });
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadDashboardData();
+    }
+  }, [user, loadDashboardData]);
 
   if (loading) {
     return <div className="loading">Carregando...</div>;
@@ -76,6 +89,22 @@ const Dashboard = () => {
       <p className="dashboard-subtitle">Bem-vindo de volta! Aqui está um resumo do seu dia.</p>
 
       <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon">📄</div>
+          <div className="stat-info">
+            <h3>Orçamentos Pendentes</h3>
+            <p className="stat-number">{stats.pendingQuotesCount}</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">💶</div>
+          <div className="stat-info">
+            <h3>Valor em Orçamentos</h3>
+            <p className="stat-number">R$ {stats.pendingQuotesValue.toFixed(2)}</p>
+          </div>
+        </div>
+
         <div className="stat-card">
           <div className="stat-icon">📅</div>
           <div className="stat-info">
@@ -121,4 +150,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

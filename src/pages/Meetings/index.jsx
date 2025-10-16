@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../../lib/SupabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import './Meetings.css';
 
@@ -18,14 +18,7 @@ const Meetings = () => {
   });
   const [editingId, setEditingId] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      loadMeetings();
-      loadClients();
-    }
-  }, [user]);
-
-  const loadMeetings = async () => {
+  const loadMeetings = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('meetings')
@@ -41,9 +34,9 @@ const Meetings = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const loadClients = async () => {
+  const loadClients = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('clients')
@@ -56,7 +49,14 @@ const Meetings = () => {
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadMeetings();
+      loadClients();
+    }
+  }, [user, loadMeetings, loadClients]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -233,4 +233,3 @@ const Meetings = () => {
 };
 
 export default Meetings;
-

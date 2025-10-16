@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from './supabaseClient';
+import { supabase } from './SupabaseClient';
 
 const AuthContext = createContext({});
 
@@ -32,4 +32,3 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

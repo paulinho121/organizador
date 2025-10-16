@@ -1,7 +1,7 @@
 import React from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/SupabaseClient';
 import './Auth.css';
 
 const AuthPage = () => {
@@ -39,4 +39,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-

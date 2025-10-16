@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../../lib/SupabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import '../Meetings/Meetings.css';
 
@@ -15,13 +15,7 @@ const Clients = () => {
   });
   const [editingId, setEditingId] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      loadClients();
-    }
-  }, [user]);
-
-  const loadClients = async () => {
+  const loadClients = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('clients')
@@ -36,7 +30,13 @@ const Clients = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadClients();
+    }
+  }, [user, loadClients]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -180,4 +180,3 @@ const Clients = () => {
 };
 
 export default Clients;
-

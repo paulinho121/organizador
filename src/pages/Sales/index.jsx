@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../../lib/SupabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import '../Meetings/Meetings.css';
 import './Sales.css';
@@ -19,14 +19,7 @@ const Sales = () => {
   });
   const [editingId, setEditingId] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      loadSales();
-      loadClients();
-    }
-  }, [user]);
-
-  const loadSales = async () => {
+  const loadSales = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('sales')
@@ -41,9 +34,9 @@ const Sales = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const loadClients = async () => {
+  const loadClients = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('clients')
@@ -56,7 +49,14 @@ const Sales = () => {
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadSales();
+      loadClients();
+    }
+  }, [user, loadSales, loadClients]);
 
   const calculateCommission = (value, percentage) => {
     return (parseFloat(value) * parseFloat(percentage)) / 100;
@@ -270,4 +270,3 @@ const Sales = () => {
 };
 
 export default Sales;
-

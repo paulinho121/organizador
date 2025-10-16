@@ -8,6 +8,7 @@ import Meetings from './pages/Meetings';
 import Clients from './pages/Clients';
 import Sales from './pages/Sales';
 import Reminders from './pages/Reminders';
+import Quotes from './pages/Quotes';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -68,6 +69,14 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/quotes"
+          element={
+            <ProtectedRoute>
+              <Quotes />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
@@ -82,4 +91,3 @@ function App() {
 }
 
 export default App;
-

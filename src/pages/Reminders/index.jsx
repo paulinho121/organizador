@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../../lib/SupabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import '../Meetings/Meetings.css';
 import './Reminders.css';
@@ -16,13 +16,7 @@ const Reminders = () => {
   });
   const [editingId, setEditingId] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      loadReminders();
-    }
-  }, [user]);
-
-  const loadReminders = async () => {
+  const loadReminders = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('reminders')
@@ -37,7 +31,13 @@ const Reminders = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadReminders();
+    }
+  }, [user, loadReminders]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -242,4 +242,3 @@ const Reminders = () => {
 };
 
 export default Reminders;
-

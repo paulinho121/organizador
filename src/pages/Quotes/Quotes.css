@@ -1,0 +1,25 @@
+.quote-card .quote-status {
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: white;
+    font-size: 0.8rem;
+  }
+  
+  .quote-card.status-pendente .quote-status {
+    background-color: #f0ad4e; /* Laranja */
+  }
+  
+  .quote-card.status-aceito .quote-status {
+    background-color: #5cb85c; /* Verde */
+  }
+  
+  .quote-card.status-recusado .quote-status {
+    background-color: #d9534f; /* Vermelho */
+  }
+  
+  .btn-convert {
+    background-color: #5cb85c; /* Verde */
+    color: white;
+  }
+  
