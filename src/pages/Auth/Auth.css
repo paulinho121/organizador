@@ -31,3 +31,12 @@
   text-align: center;
 }
 
+@media screen and (max-width: 480px) {
+  .auth-card {
+    padding: 30px;
+  }
+
+  .auth-title {
+    font-size: 24px;
+  }
+}

@@ -64,3 +64,44 @@
   color: #666;
 }
 
+@media screen and (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px 15px;
+  }
+
+  .dashboard-title {
+    font-size: 28px;
+  }
+
+  .stats-grid {
+    gap: 15px;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .dashboard-title {
+    font-size: 24px;
+  }
+
+  .dashboard-subtitle {
+    font-size: 14px;
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    font-size: 32px;
+  }
+
+  .stat-number {
+    font-size: 24px;
+  }
+}

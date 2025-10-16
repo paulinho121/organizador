@@ -9,17 +9,8 @@ import Clients from './pages/Clients';
 import Sales from './pages/Sales';
 import Reminders from './pages/Reminders';
 import Quotes from './pages/Quotes';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
-
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div className="loading">Carregando...</div>;
-  }
-
-  return user ? children : <Navigate to="/" />;
-};
 
 function AppContent() {
   const { user } = useAuth();

@@ -127,3 +127,37 @@
     display: flex;
     gap: 10px;
 }
+
+@media screen and (max-width: 768px) {
+  .stats-summary {
+    gap: 15px;
+  }
+
+  .summary-card {
+    padding: 20px;
+  }
+
+  .summary-card p {
+    font-size: 28px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar input {
+    max-width: none;
+  }
+
+  .item-card-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item-actions-list {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}

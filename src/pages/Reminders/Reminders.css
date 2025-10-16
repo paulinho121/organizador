@@ -51,3 +51,16 @@
   margin: 0;
 }
 
+@media screen and (max-width: 768px) {
+  .reminders-section h2 {
+    font-size: 22px;
+  }
+
+  .reminder-card {
+    padding: 20px;
+  }
+
+  .reminder-card h3 {
+    font-size: 18px;
+  }
+}
