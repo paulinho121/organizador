@@ -15,9 +15,11 @@ CREATE TABLE IF NOT EXISTS profiles (
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
 -- Política RLS para profiles
+DROP POLICY IF EXISTS "Usuários podem ver apenas seu próprio perfil" ON profiles;
 CREATE POLICY "Usuários podem ver apenas seu próprio perfil" ON profiles
   FOR SELECT USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Usuários podem atualizar apenas seu próprio perfil" ON profiles;
 CREATE POLICY "Usuários podem atualizar apenas seu próprio perfil" ON profiles
   FOR UPDATE USING (auth.uid() = id);
 
@@ -38,15 +40,19 @@ CREATE TABLE IF NOT EXISTS clients (
 ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
 
 -- Políticas RLS para clients
+DROP POLICY IF EXISTS "Usuários podem ver apenas seus próprios clientes" ON clients;
 CREATE POLICY "Usuários podem ver apenas seus próprios clientes" ON clients
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem inserir seus próprios clientes" ON clients;
 CREATE POLICY "Usuários podem inserir seus próprios clientes" ON clients
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem atualizar apenas seus próprios clientes" ON clients;
 CREATE POLICY "Usuários podem atualizar apenas seus próprios clientes" ON clients
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem excluir apenas seus próprios clientes" ON clients;
 CREATE POLICY "Usuários podem excluir apenas seus próprios clientes" ON clients
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -57,11 +63,10 @@ CREATE TABLE IF NOT EXISTS meetings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL,
   client_id UUID REFERENCES clients ON DELETE SET NULL,
-  title TEXT NOT NULL,
-  description TEXT,
-  pauta TEXT, -- Campo para a pauta da reunião
+  pauta TEXT NOT NULL,
   date DATE NOT NULL,
   time TIME NOT NULL,
+  link TEXT, -- Link para a reunião online
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
@@ -70,15 +75,19 @@ CREATE TABLE IF NOT EXISTS meetings (
 ALTER TABLE meetings ENABLE ROW LEVEL SECURITY;
 
 -- Políticas RLS para meetings
+DROP POLICY IF EXISTS "Usuários podem ver apenas suas próprias reuniões" ON meetings;
 CREATE POLICY "Usuários podem ver apenas suas próprias reuniões" ON meetings
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem inserir suas próprias reuniões" ON meetings;
 CREATE POLICY "Usuários podem inserir suas próprias reuniões" ON meetings
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem atualizar apenas suas próprias reuniões" ON meetings;
 CREATE POLICY "Usuários podem atualizar apenas suas próprias reuniões" ON meetings
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem excluir apenas suas próprias reuniões" ON meetings;
 CREATE POLICY "Usuários podem excluir apenas suas próprias reuniões" ON meetings
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -102,15 +111,19 @@ CREATE TABLE IF NOT EXISTS sales (
 ALTER TABLE sales ENABLE ROW LEVEL SECURITY;
 
 -- Políticas RLS para sales
+DROP POLICY IF EXISTS "Usuários podem ver apenas suas próprias vendas" ON sales;
 CREATE POLICY "Usuários podem ver apenas suas próprias vendas" ON sales
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem inserir suas próprias vendas" ON sales;
 CREATE POLICY "Usuários podem inserir suas próprias vendas" ON sales
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem atualizar apenas suas próprias vendas" ON sales;
 CREATE POLICY "Usuários podem atualizar apenas suas próprias vendas" ON sales
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem excluir apenas suas próprias vendas" ON sales;
 CREATE POLICY "Usuários podem excluir apenas suas próprias vendas" ON sales
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -132,15 +145,19 @@ CREATE TABLE IF NOT EXISTS reminders (
 ALTER TABLE reminders ENABLE ROW LEVEL SECURITY;
 
 -- Políticas RLS para reminders
+DROP POLICY IF EXISTS "Usuários podem ver apenas seus próprios lembretes" ON reminders;
 CREATE POLICY "Usuários podem ver apenas seus próprios lembretes" ON reminders
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem inserir seus próprios lembretes" ON reminders;
 CREATE POLICY "Usuários podem inserir seus próprios lembretes" ON reminders
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem atualizar apenas seus próprios lembretes" ON reminders;
 CREATE POLICY "Usuários podem atualizar apenas seus próprios lembretes" ON reminders
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem excluir apenas seus próprios lembretes" ON reminders;
 CREATE POLICY "Usuários podem excluir apenas seus próprios lembretes" ON reminders
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -164,15 +181,19 @@ CREATE TABLE IF NOT EXISTS quotes (
 ALTER TABLE quotes ENABLE ROW LEVEL SECURITY;
 
 -- Políticas RLS para quotes
+DROP POLICY IF EXISTS "Usuários podem ver apenas seus próprios orçamentos" ON quotes;
 CREATE POLICY "Usuários podem ver apenas seus próprios orçamentos" ON quotes
     FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem inserir seus próprios orçamentos" ON quotes;
 CREATE POLICY "Usuários podem inserir seus próprios orçamentos" ON quotes
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem atualizar apenas seus próprios orçamentos" ON quotes;
 CREATE POLICY "Usuários podem atualizar apenas seus próprios orçamentos" ON quotes
     FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuários podem excluir apenas seus próprios orçamentos" ON quotes;
 CREATE POLICY "Usuários podem excluir apenas seus próprios orçamentos" ON quotes
     FOR DELETE USING (auth.uid() = user_id);
 

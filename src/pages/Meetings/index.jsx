@@ -10,12 +10,11 @@ const Meetings = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    pauta: '', // Adicionado para a pauta da reunião
+    pauta: '',
     date: '',
     time: '',
     client_id: '',
+    link: '', // Adicionado para o link da reunião
   });
   const [editingId, setEditingId] = useState(null);
 
@@ -88,12 +87,11 @@ const Meetings = () => {
 
   const handleEdit = (meeting) => {
     setFormData({
-      title: meeting.title,
-      description: meeting.description || '',
       pauta: meeting.pauta || '',
       date: meeting.date,
       time: meeting.time,
       client_id: meeting.client_id || '',
+      link: meeting.link || '', // Adicionado para o link da reunião
     });
     setEditingId(meeting.id);
     setShowForm(true);
@@ -113,12 +111,11 @@ const Meetings = () => {
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
       pauta: '',
       date: '',
       time: '',
       client_id: '',
+      link: '',
     });
     setEditingId(null);
     setShowForm(false);
@@ -140,31 +137,13 @@ const Meetings = () => {
       {showForm && (
         <form onSubmit={handleSubmit} className="form-card">
           <div className="form-group">
-            <label>Título *</label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Descrição</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows="3"
-            />
-          </div>
-
-          <div className="form-group">
             <label>Pauta</label>
             <textarea
               value={formData.pauta}
               onChange={(e) => setFormData({ ...formData, pauta: e.target.value })}
               rows="5"
               placeholder="Digite os tópicos da reunião, um por linha."
+              required
             />
           </div>
 
@@ -205,6 +184,16 @@ const Meetings = () => {
             </select>
           </div>
 
+          <div className="form-group">
+            <label>Link da Reunião</label>
+            <input
+              type="url"
+              value={formData.link}
+              onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+              placeholder="https://exemplo.com/reuniao"
+            />
+          </div>
+
           <div className="form-actions">
             <button type="submit" className="btn-primary">
               {editingId ? 'Atualizar' : 'Criar'}
@@ -234,7 +223,6 @@ const Meetings = () => {
   );
 };
 
-// Componente para cada item da reunião com cronômetro
 const MeetingItem = ({ meeting, onEdit, onDelete }) => {
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -262,9 +250,6 @@ const MeetingItem = ({ meeting, onEdit, onDelete }) => {
 
   return (
     <div className="item-card">
-      <h3>{meeting.title}</h3>
-      {meeting.description && <p className="item-description">{meeting.description}</p>}
-      
       {meeting.pauta && (
         <div className="pauta-section">
           <h4>Pauta da Reunião:</h4>
@@ -281,6 +266,14 @@ const MeetingItem = ({ meeting, onEdit, onDelete }) => {
         <span>🕐 {meeting.time}</span>
         {meeting.clients && <span>👤 {meeting.clients.name}</span>}
       </div>
+
+      {meeting.link && (
+        <div className="item-link">
+          <a href={meeting.link} target="_blank" rel="noopener noreferrer">
+            Link da Reunião
+          </a>
+        </div>
+      )}
 
       <div className="stopwatch-container">
         <p className="timer-display">{formatTime(timer)}</p>
