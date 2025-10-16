@@ -22,4 +22,96 @@
     background-color: #5cb85c; /* Verde */
     color: white;
   }
-  
+
+/* Toolbar for search and view toggle */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-bar {
+  flex-grow: 1;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.view-toggle button {
+  padding: 8px 15px;
+  border: 1px solid #667eea;
+  background-color: transparent;
+  color: #667eea;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.view-toggle button:hover {
+  background-color: #f0f2ff;
+}
+
+.view-toggle button.active {
+  background-color: #667eea;
+  color: white;
+}
+
+/* List View Styles */
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.item-card-list {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.item-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.item-details-list h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.item-details-list span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #555;
+}
+
+.item-actions-list {
+    display: flex;
+    gap: 10px;
+}
