@@ -55,6 +55,7 @@
   font-weight: 700;
   color: #667eea;
   margin: 0;
+  white-space: nowrap;
 }
 
 .loading {

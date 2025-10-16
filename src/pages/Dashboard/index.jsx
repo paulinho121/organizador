@@ -13,6 +13,7 @@ const Dashboard = () => {
     totalCommission: 0,
     pendingQuotesCount: 0,
     pendingQuotesValue: 0,
+    totalSalesValue: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -36,10 +37,11 @@ const Dashboard = () => {
       // Contar vendas e calcular comissão total
       const { data: salesData, count: salesCount } = await supabase
         .from('sales')
-        .select('commission_value', { count: 'exact' })
+        .select('value, commission_value', { count: 'exact' })
         .eq('user_id', user.id);
 
       const totalCommission = salesData?.reduce((sum, sale) => sum + (sale.commission_value || 0), 0) || 0;
+      const totalSalesValue = salesData?.reduce((sum, sale) => sum + (sale.value || 0), 0) || 0;
 
       // Contar lembretes pendentes
       const { count: remindersCount } = await supabase
@@ -65,6 +67,7 @@ const Dashboard = () => {
         totalCommission: totalCommission,
         pendingQuotesCount: quotesCount || 0,
         pendingQuotesValue: pendingQuotesValue,
+        totalSalesValue: totalSalesValue,
       });
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
@@ -142,6 +145,14 @@ const Dashboard = () => {
           <div className="stat-info">
             <h3>Lembretes Pendentes</h3>
             <p className="stat-number">{stats.reminders}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">🤑</div>
+          <div className="stat-info">
+            <h3>Valor Total Vendido</h3>
+            <p className="stat-number">R$ {stats.totalSalesValue.toFixed(2)}</p>
           </div>
         </div>
       </div>
